@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_void_to_null
+// ignore_for_file: prefer_void_to_null, unnecessary_library_name
 
 @JS("window.navigator")
 library usb;

@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Updated android build tools
+
 ## 1.0.4
 
 - PR3: Fixed Android 14 USB connection (thank you [@konstantinullrich](https://github.com/konstantinullrich))
