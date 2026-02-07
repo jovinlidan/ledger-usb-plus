@@ -1,3 +1,7 @@
+## 1.0.8
+
+- Updated Android gradle plugin to 9.0.0
+
 ## 1.0.7
 
 - Fixed android 16 devices not being able to establish connection
