@@ -1,3 +1,7 @@
+## 1.0.8+scallop.1
+
+- Fix: run the `ledger_usb` method channel on a background task queue so the blocking `bulkTransfer` USB reads don't freeze the Flutter UI thread (notably during the on-device approval wait). Fork patch.
+
 ## 1.0.8
 
 - Updated Android gradle plugin to 9.0.0

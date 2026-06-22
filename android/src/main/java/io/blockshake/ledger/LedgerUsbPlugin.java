@@ -13,10 +13,12 @@ import io.blockshake.ledger.operations.RequestPermissionOperation;
 import io.blockshake.ledger.operations.TransferInOperation;
 import io.blockshake.ledger.operations.TransferOutOperation;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.StandardMethodCodec;
 
 public class LedgerUsbPlugin implements FlutterPlugin, MethodCallHandler {
 
@@ -28,7 +30,14 @@ public class LedgerUsbPlugin implements FlutterPlugin, MethodCallHandler {
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-        channel = new MethodChannel(binding.getBinaryMessenger(), "ledger_usb");
+        // Run method calls on a serial background task queue. transferIn does a
+        // blocking bulkTransfer (up to its timeout) that, on the default platform
+        // thread, freezes the Flutter UI while the device hasn't responded yet
+        // (e.g. waiting for on-device approval). A background queue keeps the
+        // blocking USB I/O off the UI thread while preserving call ordering.
+        BinaryMessenger messenger = binding.getBinaryMessenger();
+        BinaryMessenger.TaskQueue taskQueue = messenger.makeBackgroundTaskQueue();
+        channel = new MethodChannel(messenger, "ledger_usb", StandardMethodCodec.INSTANCE, taskQueue);
         channel.setMethodCallHandler(this);
         context = binding.getApplicationContext();
         usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
